@@ -6,17 +6,17 @@ info:
     email: daniil.pimenov@gmail.com
   version: 1.0.0
 servers:
-  - url: http://localhost:8080/v1
+  - url: http://localhost:8080
 
 tags:
-  - name: Counters
+  - name: counters
 
 paths:
   /counters:
     post:
       summary: Increment a counter by given number
       tags:
-        - Counters
+        - counters
       operationId: incrementCounter
       requestBody:
         description: Counter object that contains counter ID and increment
@@ -27,7 +27,7 @@ paths:
         required: true
       responses:
         200:
-          description: Successfully incremented the counter
+          description: Successfully incremented the counter, returning new value
           content:
             application/json:
               schema:
@@ -36,16 +36,28 @@ paths:
                 example: 100
         400:
           description: Wrong input
-          content: {}
         404:
           description: No counter with such ID
-          content: {}
       x-codegen-request-body-name: body
+    get:
+      summary: Get first 50 counters
+      tags:
+        - counters
+      operationId: getCounters
+      responses:
+        200:
+          description: Success, returning a list of counters (max 50)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Counter'
 
   /counters/{counterId}:
     get:
       tags:
-        - Counters
+        - counters
       summary: Get value of a counter
       operationId: getCounterValue
       parameters:
@@ -58,7 +70,7 @@ paths:
             type: string
       responses:
         200:
-          description: Successful operation
+          description: Successful operation, returning value
           content:
             application/json:
               schema:
@@ -67,12 +79,11 @@ paths:
                 example: 100
         404:
           description: No counter with such ID
-          content: {}
 
   /counters/new:
     post:
       tags:
-        - Counters
+        - counters
       summary: Create a new counter with ID and value
       operationId: createNewCounter
       requestBody:
@@ -91,7 +102,6 @@ paths:
                 $ref: '#/components/schemas/Counter'
         400:
           description: ID already exists
-          content: {}
       x-codegen-request-body-name: body
 
 components:
@@ -115,14 +125,17 @@ components:
       required:
         - id
       type: object
-      x-class-extra-annotation: "@javax.persistence.Entity"
+      x-class-extra-annotation: '@javax.persistence.Entity(name="counters")'
       properties:
         id:
-          maxLength: 10
           type: string
-          x-field-extra-annotation: "@javax.persistence.Id"
+          maxLength: 10
+          x-field-extra-annotation: '@javax.persistence.Id'
         value:
-          minimum: 0
           type: integer
           format: int64
+          minimum: 0
           default: 0
+        title:
+          type: string
+          maxLength: 100

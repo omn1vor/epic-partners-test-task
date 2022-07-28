@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class CountersController implements CountersApi {
     @Autowired
@@ -26,6 +28,11 @@ public class CountersController implements CountersApi {
 
     @Override
     public ResponseEntity<Long> incrementCounter(CounterIncrementRequest body) {
-        return null;
+        return new ResponseEntity<>(counterService.incrementCounter(body), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<List<Counter>> getCounters() {
+        return new ResponseEntity<>(counterService.getTop50Counters(), HttpStatus.OK);
     }
 }
