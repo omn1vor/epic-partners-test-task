@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-counter
+      author: Daniel Pimenov
+      changes:
+        - createTable:
+            tableName: counters
+            columns:
+              - column:
+                  name: id
+                  type: varchar(10)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(100)
+              - column:
+                  name: value
+                  type: bigint
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false

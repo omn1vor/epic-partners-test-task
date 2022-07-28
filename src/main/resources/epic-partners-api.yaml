@@ -1,0 +1,128 @@
+openapi: 3.0.1
+info:
+  title: Swagger Spring Boot App (a test task  for Epic Partners)
+  description: This is an app for Epic Partners test task.
+  contact:
+    email: daniil.pimenov@gmail.com
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/v1
+
+tags:
+  - name: Counters
+
+paths:
+  /counters:
+    post:
+      summary: Increment a counter by given number
+      tags:
+        - Counters
+      operationId: incrementCounter
+      requestBody:
+        description: Counter object that contains counter ID and increment
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CounterIncrementRequest'
+        required: true
+      responses:
+        200:
+          description: Successfully incremented the counter
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int64
+                example: 100
+        400:
+          description: Wrong input
+          content: {}
+        404:
+          description: No counter with such ID
+          content: {}
+      x-codegen-request-body-name: body
+
+  /counters/{counterId}:
+    get:
+      tags:
+        - Counters
+      summary: Get value of a counter
+      operationId: getCounterValue
+      parameters:
+        - name: counterId
+          in: path
+          description: ID of the counter
+          required: true
+          schema:
+            maxLength: 10
+            type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int64
+                example: 100
+        404:
+          description: No counter with such ID
+          content: {}
+
+  /counters/new:
+    post:
+      tags:
+        - Counters
+      summary: Create a new counter with ID and value
+      operationId: createNewCounter
+      requestBody:
+        description: Counter object to be created, with ID and initial value
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Counter'
+        required: true
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Counter'
+        400:
+          description: ID already exists
+          content: {}
+      x-codegen-request-body-name: body
+
+components:
+  schemas:
+
+    CounterIncrementRequest:
+      required:
+        - counterId
+        - incrementCount
+      type: object
+      properties:
+        counterId:
+          maxLength: 10
+          type: string
+        incrementCount:
+          minimum: 1
+          type: integer
+          format: int64
+
+    Counter:
+      required:
+        - id
+      type: object
+      x-class-extra-annotation: "@javax.persistence.Entity"
+      properties:
+        id:
+          maxLength: 10
+          type: string
+          x-field-extra-annotation: "@javax.persistence.Id"
+        value:
+          minimum: 0
+          type: integer
+          format: int64
+          default: 0
