@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: populate-counters
+      author: Daniel Pimenov
+      changes:
+        - insert:
+            tableName: counters
+            columns:
+              - column:
+                  name: id
+                  value: '0000000001'
+              - column:
+                  name: value
+                  valueNumeric: 0
+              - column:
+                  name: title
+                  value: counter A
+        - insert:
+            tableName: counters
+            columns:
+              - column:
+                  name: id
+                  value: '0000000002'
+              - column:
+                  name: value
+                  valueNumeric: 100
+              - column:
+                  name: title
+                  value: counter B
+        - insert:
+            tableName: counters
+            columns:
+              - column:
+                  name: id
+                  value: '0000000003'
+              - column:
+                  name: value
+                  valueNumeric: 100000
+              - column:
+                  name: title
+                  value: counter C
