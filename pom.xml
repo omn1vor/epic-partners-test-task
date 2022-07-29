@@ -17,6 +17,8 @@
         <java.version>17</java.version>
         <springdoc.version>1.6.8</springdoc.version>
         <swagger-ui.version>4.10.3</swagger-ui.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
     </properties>
     <dependencies>
         <dependency>
