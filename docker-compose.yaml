@@ -1,0 +1,42 @@
+version: "3.9"
+services:
+  db:
+    image: mysql
+    #command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: counters
+    ports:
+      - 3306:3306
+    volumes:
+      - mysqldata:/var/lib/mysql
+    networks:
+      - mysqlbus
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost", "-uroot", "-ppass" ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  app:
+    depends_on:
+      db:
+        condition: service_healthy
+    build: .
+    ports:
+      - 8080:8080
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/counters
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: pass
+    volumes:
+      - mysqldata:/var/lib/mysql
+    networks:
+      - mysqlbus
+
+volumes:
+  mysqldata:
+networks:
+  mysqlbus:
+    driver: bridge
