@@ -10,3 +10,4 @@ Swagger Spring Boot App (a test task  for Epic Partners)
 - Created an index.html for the app description and another page for the visual counter controls, to make it 2 pages.
 - Added Bootstrap for the looks, some JS to make buttons work.
 - Added db population in liquibase.
+- Added Docker configuration for MySQL and the app itself, so it should be starting now with "docker-compose up" 
